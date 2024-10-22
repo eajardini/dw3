@@ -1,0 +1,3 @@
+npm install express cookie-parser express-session dotenv axios
+Bibliotecas para nunjucks
+npm install nunjucks chokidar validate.js
