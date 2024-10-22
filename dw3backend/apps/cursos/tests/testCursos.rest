@@ -5,8 +5,8 @@ POST http://localhost:40000/Login HTTP/1.1
 content-type: application/json
 
 {    
-    "username": "qwe",
-    "password": "qwe"
+    "UserName": "qwe",
+    "Password": "qwe"
 }
 ### Seta o token
 @accessToken = {{loginAutenticado.response.body.$.token}}

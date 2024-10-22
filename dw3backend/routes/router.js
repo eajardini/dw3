@@ -15,18 +15,18 @@ routerApp.get("/", (req, res) => {
 });
 
 //Rotas de Alunos
-routerApp.get("/getAllAlunos", appAlunos.getAllAlunos);
+routerApp.get("/getAllAlunos", appLogin.AutenticaJWT, appAlunos.getAllAlunos);
 routerApp.post("/getAlunoByID", appLogin.AutenticaJWT, appAlunos.getAlunoByID);
 routerApp.post("/insertAlunos", appLogin.AutenticaJWT, appAlunos.insertAlunos);
-routerApp.post("/updateAlunos", appAlunos.updateAlunos);
-routerApp.post("/DeleteAlunos", appAlunos.DeleteAlunos);
+routerApp.post("/updateAlunos", appLogin.AutenticaJWT, appAlunos.updateAlunos);
+routerApp.post("/DeleteAlunos", appLogin.AutenticaJWT, appAlunos.DeleteAlunos);
 
 //Rotas de Cursos
-routerApp.get("/GetAllCursos", appCursos.GetAllCursos);
-routerApp.post("/GetCursoByID", appCursos.GetCursoByID);
-routerApp.post("/InsertCursos", appCursos.InsertCursos);
-routerApp.post("/UpdateCursos", appCursos.UpdateCursos);
-routerApp.post("/DeleteCursos", appCursos.DeleteCursos);
+routerApp.get("/GetAllCursos", appLogin.AutenticaJWT, appCursos.GetAllCursos);
+routerApp.post("/GetCursoByID", appLogin.AutenticaJWT, appCursos.GetCursoByID);
+routerApp.post("/InsertCursos", appLogin.AutenticaJWT, appCursos.InsertCursos);
+routerApp.post("/UpdateCursos", appLogin.AutenticaJWT, appCursos.UpdateCursos);
+routerApp.post("/DeleteCursos", appLogin.AutenticaJWT, appCursos.DeleteCursos);
 
 // Rota Login
 routerApp.post("/Login", appLogin.Login);
