@@ -21,7 +21,7 @@ Authorization: Bearer {{accessToken}}
 
 {    
     "alunoid": 0,
-    "prontuario": "pront3",
+    "prontuario": "pront9",
     "nome": "Carlos das Matias",
     "endereco": " Rua das couves",
     "rendafamiliar": 10000,
@@ -45,7 +45,7 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {    
-    "alunoid": 18
+    "alunoid": 1
 }
 
 

@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var loginApp = require("../apps/login/controller/ctlLogin")
-var alunoApp = require("../apps/alunos/controller/ctlAlunos")
 
 
 //@ Função necessária para evitar que usuários não autenticados acessem o sistema.
@@ -25,11 +24,6 @@ router.get('/', authenticationMiddleware, function (req, res, next) {
 
   res.render('home/view/index.njk', { parametros });
 });
-
-
-//@ Módulo de alunos
-router.get('/ManutAlunos', alunoApp.ManutAlunos)
-
 
 
 /* GET login page. */
