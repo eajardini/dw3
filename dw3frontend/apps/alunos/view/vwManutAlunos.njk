@@ -1,0 +1,80 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+
+  <ol class="breadcrumb mb-2">
+    <li class="breadcrumb-item active">{{title}}</li>
+  </ol>
+  <div class="row">
+    <div class="col-xl-12">
+
+      <div class="card-header">
+        Manutenção de Alunos
+      </div>
+
+      <div class="card-body">
+        <div class="">
+          <div style="margin-bottom: 15px;">
+            <a href="/alunos/insertAlunos" class="btn btn-primary">
+              Inserir novo aluno
+            </a>
+          </div>
+
+          <div style="background-color: #f8f9fa">
+            <table id="tabAlunos" class="display" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Ação</th>
+                  <th>Prontuário</th>
+                  <th>Nome</th>
+                  <th>Endereço</th>
+                  <th>datanascimento</th>
+                  <th>Curso</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for reg in data %}
+                  <tr>
+                    <td>
+                      {# Link para visualização dos dados #}
+                      <a href="/alunos/viewAlunos/{{ reg.alunoid }}"  title="Visualizar">
+                        <i class="fas fa-search"></i>
+                      </a>
+
+                      {# Link para atualuzação e remoção dos dados#}
+                      <a href="/alunos/UpdateAlunos/{{ reg.alunoid }}" title="Atualizar" style="margin-left: 10px;">
+                        <i class="fas fa-pencil-alt"></i>
+                      </a>
+                    </td>
+                    <td>{{reg.prontuario}}</td>
+                    <td>{{reg.nome}}</td>
+                    <td>{{reg.endereco}}</td>
+                    <td>{{reg.datanascimento}}</td>
+                    <td>{{reg.descricao}}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    window.onload = function () {
+      windowOnLoad();
+      //@ Caso tenha dado erro no servidor frontEnd, ele será mostrado aqui.
+      const localErro = "{{erro}}";
+      if (localErro != "") {
+        alert("[vwAlunos|onload]Servidor retornou o erro:" + localErro);
+      }
+
+      new DataTable('#tabAlunos');
+    };
+  </script>
+
+{% endblock %}

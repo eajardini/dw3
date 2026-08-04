@@ -1,0 +1,184 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+  <div x-data="alunoForm()">
+    <ol class="breadcrumb mb-2">
+      <li class="breadcrumb-item active">{{title}}</li>
+    </ol>
+    <div class="row">
+      <div class="col-12">
+
+        <div class="card-header">
+          {{tite}}
+
+        </div>
+
+        <div class="card-body">
+          <div class="">
+
+            {# <form @submit.prevent="submitForm"> #}
+            <form>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="prontuario">Prontuário</label>
+                    <input type="text" class="form-control" id="prontuario" required="required" x-model="form.prontuario" x-bind:disabled="disabled">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" class="form-control" id="nome" x-model="form.nome" x-bind:disabled="disabled">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="endereco">Endereço</label>
+                <input type="text" class="form-control" id="endereco" x-model="form.endereco" x-bind:disabled="disabled">
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="rendafamiliar">Renda Familiar</label>
+                <input type="number" class="form-control" id="rendafamiliar" x-model="form.rendafamiliar" x-bind:disabled="disabled">
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="datanascimento">Data de Nascimento</label>
+                <input type="date" class="form-control" id="datanascimento" x-model="form.datanascimento" x-bind:disabled="disabled">
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="cursoid">Curso ID</label>
+                {# <input type="number" class="form-control" id="cursoid" x-model="form.cursoid"> #}
+                <select class="form-select" aria-label="Default select example" id="cursoid" x-model="form.cursoid" x-bind:disabled="disabled" name="cursoid">
+                  {% for reg in curso %}
+                    {% if (data.cursoid === reg.cursoid) %}
+                      <option value="{{reg.cursoid}}">{{reg.descricao}}</option>
+                    {% else %}
+                      <option value="{{reg.cursoid}}">{{reg.descricao}}</option>
+                    {% endif %}
+                    {%endfor%}
+                  </select>
+                </div>
+
+                <button type="button" @click="updateForm()" class="btn btn-primary mt-4">Salvar</button>
+                <button type="button" @click="deleteForm()" x-show="!disabled" class="btn btn-danger mt-4">Desmatricular</button>
+                <a href="/alunos/manutAlunos" class="btn btn-info mt-4 ml-2" role="button" aria-disabled="true">Retornar</a>
+              </form>
+
+              <div class="mt-3">
+                <template x-if="message">
+                  <div :class="messageClass" x-text="message"></div>
+                </template>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+      window.onload = function () {
+        windowOnLoad();
+
+        //@ Caso tenha dado erro no servidor frontEnd, ele será mostrado aqui.
+        const localErro = "{{erro}}";
+        if (localErro != "") {
+          alert("[vwAlunos|onload]Servidor retornou o erro:" + localErro);
+        }
+        $("#prontuario").focus();
+
+      };
+
+      function alunoForm() {
+        return {
+          form: {
+            alunoid: "{{data.alunoid}}",
+            prontuario: "{{data.prontuario}}",
+            nome: "{{data.nome}}",
+            endereco: "{{data.endereco}}",
+            rendafamiliar: "{{data.rendafamiliar}}",
+            datanascimento: "{{data.datanascimento}}",
+            cursoid: "{{data.cursoid}}",
+            deleted: false
+          },
+          message: '',
+          messageClass: '',
+          disabled: {{disabled}},
+
+          async updateForm() {
+            try {
+              
+              //console.log("Valor na página:", JSON.stringify(this.form))
+              
+              const response = await fetch('/alunos/UpdateAlunos', {
+                method: 'POST',
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(this.form)
+              });
+
+              const result = await response.json();
+              if (result.status == "ok") {
+                alert("Aluno atualizado com suscesso");
+              } else {
+                const errorData = result.status;
+                this.message = `Erro! Não foi possível atualizar os dados do aluno devido ao erro: ${errorData}`;
+                this.messageClass = 'alert alert-danger';
+              }
+            } catch (error) {
+              this.message = `Erro de conexão: ${error.message}`;
+              this.messageClass = 'alert alert-danger';
+            }
+          },
+
+          async deleteForm() {
+            try {
+                console.log("Valor na página:", JSON.stringify(this.form.alunoid))
+                const response = await fetch('/alunos/DeleteAlunos', {
+                  method: 'POST',
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify(this.form)
+                });
+
+                const result = await response.json();
+                if (result.status == "ok") {
+                  alert("Aluno desmatriculado com suscesso");
+                  //@ Redireciona para a página de manutenção
+                  window.location.href = "/alunos/manutAlunos";
+
+                } else {
+                  const errorData = result.status;
+                  this.message = `Erro! Não foi possível atualizar os dados do aluno devido ao erro: ${errorData}`;
+                  this.messageClass = 'alert alert-danger';
+                }
+
+            } catch (error) {
+              this.message = `Erro de conexão: ${error.message}`;
+              this.messageClass = 'alert alert-danger';
+            }
+          },
+
+          resetForm() {
+            this.form = {
+              prontuario: '',
+              nome: '',
+              endereco: '',
+              rendafamiliar: '',
+              datanascimento: '',
+              cursoid: '',
+              deleted: false
+            };
+            this.message = false;
+          }
+        };
+      }
+    </script>
+
+  {% endblock %}

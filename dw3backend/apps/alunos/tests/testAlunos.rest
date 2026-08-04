@@ -1,0 +1,65 @@
+### Necessário para pegar o token
+### Post
+# @name loginAutenticado
+POST http://localhost:40000/Login HTTP/1.1
+content-type: application/json
+
+{    
+    "UserName": "qwe",
+    "Password": "qwe"
+}
+### Seta o token
+@accessToken = {{loginAutenticado.response.body.$.token}}
+@username = {{loginAutenticado.response.body.$.username}}
+
+
+
+### teste de inserção de aluno
+POST http://localhost:40000/insertAluno HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "alunoid": 0,
+    "prontuario": "pront6",
+    "nome": "Carlos das Matias",
+    "endereco": " Rua das couves",
+    "rendafamiliar": 10000,
+    "datanascimento": "1999-12-12",
+    "cursoid": 2,
+    "deleted": false
+}
+
+### teste de buscar todos os alunos
+GET http://localhost:40000/getAllAlunos HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    
+}
+
+### teste de buscar aluno por ID
+GET http://localhost:40000/getAlunoByID/1 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+### teste de atualização de aluno
+PUT http://localhost:40000/updateAluno/1 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "prontuario": "pront109",
+    "nome": "xJosé das Neves",
+    "endereco": "x Rua das couves",
+    "rendafamiliar": 0,
+    "datanascimento": "1999-12-12",
+    "cursoid": 2,
+    "deleted": false
+}
+
+### teste de atualização de aluno
+DELETE http://localhost:40000/deleteAluno/1 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}

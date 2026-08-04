@@ -1,0 +1,26 @@
+1)
+npm i express pg ejs body-parser dotenv jsonwebtoken bcryptjs
+
+2) Criar arquivo .gitingnore:
+    vim .gitignore
+        node_modules/
+
+3) Criar arquivo .env
+    vim .env
+
+        APP_NAME=dw3
+
+        SECRET_API=9as1%12#xz0#@
+
+        # Banco de dados
+        DB_NAME=dw3
+        DB_USER = postgres
+        DB_PASS=postdba
+        DB_HOST=172.17.0.1
+
+4) Criar o arquivo app.js
+    vim app.js
+
+5) Criar o arquivo ./routes/router.js
+
+6)

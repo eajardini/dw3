@@ -1,0 +1,13 @@
+### teste de API /
+GET http://localhost:40000/ HTTP/1.1
+content-type: application/json
+
+
+
+### teste de API helloUser
+POST http://localhost:40000/helloUser HTTP/1.1
+content-type: application/json
+
+{    
+    "username": "John Doe"
+}

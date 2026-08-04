@@ -1,0 +1,58 @@
+### Necessário para pegar o token    
+### Post  
+# @name loginAutenticado  
+POST http://localhost:40000/Login HTTP/1.1  
+content-type: application/json  
+  
+{      
+    "UserName": "qwe",  
+    "Password": "qwe"  
+}  
+### Seta o token  
+@accessToken = {{loginAutenticado.response.body.$.token}}  
+@username = {{loginAutenticado.response.body.$.username}}  
+
+
+### teste de buscar todos os alunos  
+GET http://localhost:40000/GetAllCursos HTTP/1.1  
+content-type: application/json  
+Authorization: Bearer {{accessToken}}  
+
+{      
+    
+}  
+
+### teste de buscar aluno por ID  
+GET http://localhost:40000/GetCursoByID/4 HTTP/1.1  
+content-type: application/json  
+Authorization: Bearer {{accessToken}}  
+
+### teste de inserção de aluno  
+POST http://localhost:40000/insertCurso HTTP/1.1  
+content-type: application/json  
+Authorization: Bearer {{accessToken}}  
+ 
+{      
+    "cursoid": 0,  
+    "codigo": "Nutrição",   
+    "descricao": "Bacharelado em Nutrição",  
+    "ativo": true,  
+    "deleted": false      
+}  
+
+### teste de atualização de aluno  
+PUT http://localhost:40000/updateCurso/5 HTTP/1.1  
+content-type: application/json  
+Authorization: Bearer {{accessToken}}  
+
+{      
+    "codigo": "xNutricao",  
+    "descricao": "xBacharelado em Fisioterapia",  
+    "ativo": true,  
+    "deleted": false   
+}  
+
+### teste de atualização de aluno  
+DELETE http://localhost:40000/deleteCurso/9 HTTP/1.1  
+content-type: application/json  
+Authorization: Bearer {{accessToken}}  

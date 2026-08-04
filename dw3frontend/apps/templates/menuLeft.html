@@ -1,0 +1,65 @@
+<div id="layoutSidenav_nav">
+  <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+    <div class="sb-sidenav-menu">
+      <div class="nav">
+        <div class="sb-sidenav-menu-heading">Principal</div>
+        <a class="nav-link" href="/">
+          <div class="sb-nav-link-icon">
+            <i class="fas fa-tachometer-alt"></i>
+          </div>
+          Home
+        </a>
+        
+        <!-- Módulo acadêmico -->
+        <div>
+          <div class="sb-sidenav-menu-heading">Acadêmico</div>
+
+          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
+            aria-expanded="false" aria-controls="collapsePages">
+            <div class="sb-nav-link-icon">
+              <i class="fas fa-book-open"></i>
+            </div>
+            Acadêmico
+            <div class="sb-sidenav-collapse-arrow">
+              <i class="fas fa-angle-down"></i>
+            </div>
+          </a>
+          <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+              <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth"
+                aria-expanded="false" aria-controls="pagesCollapseAuth">
+                Alunos
+                <div class="sb-sidenav-collapse-arrow">
+                  <i class="fas fa-angle-down"></i>
+                </div>
+              </a>
+              <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
+                data-bs-parent="#sidenavAccordionPages">
+                <nav class="sb-sidenav-menu-nested nav">
+                  <a class="nav-link" href="/alunos/ManutAlunos">Manutenção de alunos</a>
+                </nav>
+              </div>
+              <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError"
+                aria-expanded="false" aria-controls="pagesCollapseError">
+                Cursos
+                <div class="sb-sidenav-collapse-arrow">
+                  <i class="fas fa-angle-down"></i>
+                </div>
+              </a>
+              <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne"
+                data-bs-parent="#sidenavAccordionPages">
+                <nav class="sb-sidenav-menu-nested nav">
+                  <a class="nav-link" href="/cursos">Manutenção de cursos</a>
+                </nav>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sb-sidenav-footer">
+      <div class="small">Bem vindo:</div>
+        {{ parametros.Usuario }}      
+    </div>
+  </nav>
+</div>
