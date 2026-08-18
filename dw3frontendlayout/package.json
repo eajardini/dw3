@@ -1,9 +1,4 @@
 {
-  "name": "dw3frontend",
-  "private": true,
-  "scripts": {
-    "start": "node app.js"
-  },
   "dependencies": {
     "body-parser": "^2.3.0",
     "dotenv": "^17.4.2",

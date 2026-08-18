@@ -1,0 +1,25 @@
+<!--views/home.njk -->
+
+{% extends "layout.njk" %}
+
+{% block content %}
+  <header class="page-header">
+    <p class="page-kicker text-primary fw-semibold mb-2">Sistema administrativo</p>
+    <h1 class="display-6 fw-bold mb-2">Painel principal</h1>
+    <p class="text-secondary mb-0">Use a navegação superior para acessar alunos, cursos ou sair da aplicação.</p>
+  </header>
+
+  <div class="hero-card card border-0 shadow-sm">
+    <div class="card-body p-4 p-lg-5">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-8">
+          <h2 class="h4 fw-semibold mb-3">Bem-vindo ao sistema</h2>
+          <p class="text-secondary mb-0">Esta área inicial.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <a class="btn btn-primary" href="/alunos">Ir para alunos</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
