@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+  // Limpa o Cookie Islogged
+  dw3ClearIsLoggedCookie();
+
   var form = document.getElementById('loginForm');
   var errorBox = document.getElementById('loginError');
 
@@ -6,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
+  // Submete os dados de Login
   form.addEventListener('submit', async function(event) {
     event.preventDefault();
 
@@ -31,23 +35,25 @@ document.addEventListener('DOMContentLoaded', function() {
           'content-type': 'application/json'
         },
         body: JSON.stringify({
-          UserName: usuario,
-          Password: senha
+          username: usuario,
+          password: senha
         })
       });
 
       if (!response.ok) {
-        throw new Error('Usuario ou senha invalidos.');
+        throw new Error('Usuário ou senha inválidos.');
       }
 
       var data = await response.json();
       var token = data.token || data.Token || data.accessToken || data.AccessToken;
 
       if (!token) {
-        throw new Error('Token nao retornado pelo servidor.');
+        throw new Error('Token não retornado pelo servidor.');
       }
 
       localStorage.setItem('token', token);
+      document.cookie = 'IsLogged=true; path=/'; // Usado ara verificar se o usuário está ou não logado.
+
       window.location.href = '/home';
     } catch (error) {
       if (errorBox) {
