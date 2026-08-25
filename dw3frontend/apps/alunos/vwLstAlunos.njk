@@ -1,0 +1,52 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <header class="page-header">
+    <p class="page-kicker text-primary fw-semibold mb-2">Cadastro</p>
+    <h1 class="h3 fw-bold mb-2">Alunos</h1>
+    <p class="text-secondary mb-0">Consulte os alunos cadastrados no sistema.</p>
+  </header>
+
+  <div class="card page-card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3 mb-4">
+        <div>
+          <h2 class="h5 fw-semibold mb-1">Lista de alunos</h2>
+          <p class="text-secondary mb-0">Alunos retornados pelo servidor backend.</p>
+        </div>
+        <a class="btn btn-primary" href="#" id="btnNovoAluno">Incluir novo aluno</a>
+      </div>
+
+      <div id="alunosAlert" class="alert alert-danger d-none" role="alert"></div>
+
+      <div id="alunosListagem" data-servidor-dw3="{{ servidorDw3 }}">
+        <div class="table-responsive">
+          <table id="tblAlunos" class="table table-striped table-hover align-middle w-100">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Prontuario</th>
+                <th>Nome</th>
+                <th>Endereco</th>
+                <th>Renda Familiar</th>
+                <th>Data Nascimento</th>
+                <th>Curso</th>
+                <th>Operacoes</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/dw3frontend.js"></script>
+  <script src="https://code.jquery.com/jquery-4.0.0-rc.1.min.js"></script>
+  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+  <script src="/apps/alunos/vwLstAlunos.js"></script>
+{% endblock %}
