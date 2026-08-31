@@ -10,7 +10,7 @@ var nunjucks = require('nunjucks');
 var indexRouter = require('./routes/rtIndex');
 var loginRouter = require('./routes/rtLogin');
 var homeRouter = require('./routes/rtHome');
-var alunosRouter = require('./routes/rtAlunos');
+var alunosRouter = require('./routes/rtAlunos'); 
 
 require('dotenv').config({ path: path.join(__dirname, 'dw3frontend.env'), quiet: true });
 
