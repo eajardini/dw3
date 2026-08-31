@@ -23,6 +23,12 @@ const GetAlunoByID = (req, res) =>
     res.json({ status: "ok", "registro": registro });
   })();
 
+const GetCursosToAlunos = (req, res) =>
+  (async () => {
+    let registro = await mdlAlunos.GetCursosToAlunos();
+    res.json({ status: "ok", "registro": registro });
+  })();
+
 const InsertAluno = (request, res) =>
   (async () => {
     //@ Atenção: aqui já começamos a utilizar a variável msg para retornar erros de banco de dados.
@@ -49,6 +55,7 @@ const DeleteAluno = (request, res) =>
 module.exports = {
   GetAllAlunos,
   GetAlunoByID,
+  GetCursosToAlunos,
   InsertAluno,
   UpdateAluno,
   DeleteAluno

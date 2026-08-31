@@ -5,8 +5,8 @@ POST http://localhost:40000/Login HTTP/1.1
 content-type: application/json
 
 {    
-    "UserName": "qwe",
-    "Password": "qwe"
+    "username": "qwe",
+    "password": "qwe"
 }
 ### Seta o token
 @accessToken = {{loginAutenticado.response.body.$.token}}
@@ -41,6 +41,11 @@ Authorization: Bearer {{accessToken}}
 
 ### teste de buscar aluno por ID
 GET http://localhost:40000/getAlunoByID/1 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+### teste de buscar cursos para alunos
+GET http://localhost:40000/getCursosToAlunos HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
