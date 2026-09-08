@@ -134,19 +134,17 @@ function configurarOperacoesAlunos(alertBox) {
     var alunoId = botao.dataset.alunoid;
 
     if (action === 'visualizar') {
-      exibirAviso(alertBox, 'Visualizar aluno ' + alunoId + '.');
+      window.location.href = '/alunos/form?oper=Re&alunoId=' + encodeURIComponent(alunoId);
       return;
     }
 
     if (action === 'atualizar') {
-      exibirAviso(alertBox, 'Atualizar aluno ' + alunoId + '.');
+      window.location.href = '/alunos/form?oper=Up&alunoId=' + encodeURIComponent(alunoId);
       return;
     }
 
     if (action === 'remover') {
-      if (confirm('Confirma a remocao do aluno ' + alunoId + '?')) {
-        exibirAviso(alertBox, 'Remover aluno ' + alunoId + '.');
-      }
+      window.location.href = '/alunos/form?oper=De&alunoId=' + encodeURIComponent(alunoId);
     }
   });
 }

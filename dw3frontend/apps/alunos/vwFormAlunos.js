@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
   if (!dw3IsLogged()) {
     return;
   }
@@ -9,16 +9,31 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
-  var oper = new URLSearchParams(window.location.search).get('oper');
+  var parametros = new URLSearchParams(window.location.search);
+  var oper = parametros.get('oper') || parametros.get('Oper');
   var servidorDw3 = form.dataset.servidorDw3;
   var btnInserir = document.getElementById('btnInserirAluno');
+  var btnAtualizar = document.getElementById('btnAtualizarAluno');
 
   inicializarSelectCursos();
 
   if (oper === 'Cr') {
+    btnInserir.classList.remove('d-none'); // Torna o Botão visível.
     dw3OcultarBotao('btnAtualizarAluno');
     dw3OcultarBotao('btnRemoverAluno');
     carregarCursosToAlunos(servidorDw3);
+  }
+
+  if (oper === 'Re') {
+    vwGetAlunoByID();
+  }
+
+  if (oper === 'Up') {
+    btnAtualizar.classList.remove('d-none');
+    btnAtualizar.disabled = !(await vwGetAlunoByID());
+    btnAtualizar.addEventListener('click', function() {
+      vwUpdateAluno();
+    });
   }
 
   if (btnInserir) {
@@ -63,8 +78,10 @@ async function carregarCursosToAlunos(servidorDw3) {
     }
 
     preencherSelectCursos(data.registro);
+    return true;
   } catch (error) {
     alert(error.message || 'Erro ao carregar cursos.');
+    return false;
   }
 }
 
@@ -135,6 +152,131 @@ async function vwInsertAluno() {
     if (btnInserir) {
       btnInserir.disabled = false;
     }
+  }
+}
+
+
+async function vwGetAlunoByID() {
+  var form = document.getElementById('frmAlunos');
+
+  try {
+    var parametros = new URLSearchParams(window.location.search);
+    var alunoId = parametros.get('alunoId');
+    var servidorDw3 = form.dataset.servidorDw3;
+
+    if (!alunoId || !/^\d+$/.test(alunoId) || Number(alunoId) <= 0) {
+      throw new Error('ID do aluno invalido.');
+    }
+
+    if (!servidorDw3) {
+      throw new Error('Endereco do servidor backend nao configurado.');
+    }
+
+    var response = await fetch(servidorDw3 + '/getAlunoByID/' + encodeURIComponent(alunoId), {
+      headers: dw3MontarHeadersAutenticacao({
+        'content-type': 'application/json'
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Nao foi possivel carregar o aluno.');
+    }
+
+    var data = await response.json();
+
+    if (data.auth === false) {
+      throw new Error(data.message || 'Sessao expirada. Faca login novamente.');
+    }
+
+    if (data.status !== 'ok' || !Array.isArray(data.registro)) {
+      throw new Error('Resposta invalida do servidor backend.');
+    }
+
+    var aluno = data.registro[0];
+
+    if (!aluno) {
+      throw new Error('Aluno nao encontrado.');
+    }
+
+    document.getElementById('alunoid').value = aluno.alunoid;
+    document.getElementById('prontuario').value = aluno.prontuario ?? '';
+    document.getElementById('nome').value = aluno.nome ?? '';
+    document.getElementById('endereco').value = aluno.endereco ?? '';
+    document.getElementById('rendafamiliar').value = aluno.rendafamiliar ?? '';
+    document.getElementById('datanascimento').value = aluno.datanascimento ? aluno.datanascimento.slice(0, 10) : '';
+    document.getElementById('deleted').value = String(aluno.deleted === true);
+
+    if (!(await carregarCursosToAlunos(servidorDw3))) {
+      return false;
+    }
+    $('#cursoid').val(aluno.cursoid).trigger('change');
+    return true;
+  } catch (error) {
+    alert(error.message || 'Erro ao carregar aluno.');
+    return false;
+  }
+}
+
+
+
+
+async function vwUpdateAluno() {
+  var form = document.getElementById('frmAlunos');
+  var btnAtualizar = document.getElementById('btnAtualizarAluno');
+
+  if (btnAtualizar.disabled || !form.reportValidity()) {
+    return;
+  }
+
+  try {
+    var alunoId = new URLSearchParams(window.location.search).get('alunoId');
+    var servidorDw3 = form.dataset.servidorDw3;
+
+    if (!alunoId || !/^\d+$/.test(alunoId) || Number(alunoId) <= 0) {
+      throw new Error('ID do aluno invalido.');
+    }
+
+    if (!servidorDw3) {
+      throw new Error('Endereco do servidor backend nao configurado.');
+    }
+
+    btnAtualizar.disabled = true;
+
+    var aluno = montarAlunoDoFormulario();
+    aluno.rendafamiliar = Number(aluno.rendafamiliar);
+    aluno.cursoid = Number(aluno.cursoid);
+
+    var response = await fetch(servidorDw3 + '/updateAluno/' + encodeURIComponent(alunoId), {
+      method: 'PUT',
+      headers: dw3MontarHeadersAutenticacao({
+        'content-type': 'application/json'
+      }),
+      body: JSON.stringify(aluno)
+    });
+
+    if (!response.ok) {
+      throw new Error('Nao foi possivel atualizar o aluno.');
+    }
+
+    var data = await response.json();
+
+    if (data.auth === false) {
+      throw new Error(data.message || 'Sessao expirada. Faca login novamente.');
+    }
+
+    if (data.status !== 'ok') {
+      throw new Error(data.status || 'Nao foi possivel atualizar o aluno.');
+    }
+
+    if (data.linhasAfetadas !== 1) {
+      throw new Error('Nenhum aluno foi atualizado.');
+    }
+
+    alert('Aluno atualizado com sucesso.');
+  } catch (error) {
+    alert(error.message || 'Erro ao atualizar aluno.');
+  } finally {
+    btnAtualizar.disabled = false;
   }
 }
 
