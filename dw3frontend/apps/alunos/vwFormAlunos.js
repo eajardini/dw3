@@ -19,8 +19,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   if (oper === 'Cr') {
     btnInserir.classList.remove('d-none'); // Torna o Botão visível.
-    dw3OcultarBotao('btnAtualizarAluno');
-    dw3OcultarBotao('btnRemoverAluno');
     carregarCursosToAlunos(servidorDw3);
   }
 
@@ -33,6 +31,16 @@ document.addEventListener('DOMContentLoaded', async function() {
     btnAtualizar.disabled = !(await vwGetAlunoByID());
     btnAtualizar.addEventListener('click', function() {
       vwUpdateAluno();
+    });
+  }
+
+
+  if (oper === 'De') {
+    var btnRemover = document.getElementById('btnRemoverAluno');
+    btnRemover.classList.remove('d-none');
+    btnRemover.disabled = !(await vwGetAlunoByID());
+    btnRemover.addEventListener('click', function() {
+      vwDeleteAluno();
     });
   }
 
@@ -279,6 +287,67 @@ async function vwUpdateAluno() {
     btnAtualizar.disabled = false;
   }
 }
+
+
+async function vwDeleteAluno() {
+  var form = document.getElementById('frmAlunos');
+  var btnRemover = document.getElementById('btnRemoverAluno');
+
+  if (btnRemover.disabled) {
+    return;
+  }
+
+  if (!window.confirm('Confirma a remoção deste aluno?')) {
+    return;
+  }
+
+  try {
+    var alunoId = document.getElementById('alunoid').value;
+    var servidorDw3 = form.dataset.servidorDw3;
+
+    if (!alunoId || !/^\d+$/.test(alunoId) || Number(alunoId) <= 0) {
+      throw new Error('ID do aluno invalido.');
+    }
+
+    if (!servidorDw3) {
+      throw new Error('Endereco do servidor backend nao configurado.');
+    }
+
+    btnRemover.disabled = true;
+
+    var response = await fetch(servidorDw3 + '/deleteAluno/' + encodeURIComponent(alunoId), {
+      method: 'DELETE',
+      headers: dw3MontarHeadersAutenticacao()
+    });
+
+    if (!response.ok) {
+      throw new Error('Nao foi possivel remover o aluno.');
+    }
+
+    var data = await response.json();
+
+    if (data.auth === false) {
+      throw new Error(data.message || 'Sessao expirada. Faca login novamente.');
+    }
+
+    if (data.status !== 'ok') {
+      throw new Error(data.status || 'Nao foi possivel remover o aluno.');
+    }
+
+    if (data.linhasAfetadas !== 1) {
+      throw new Error('Nenhum aluno foi removido.');
+    }
+
+    window.location.href = '/alunos';
+  } catch (error) {
+    alert(error.message || 'Erro ao remover aluno.');
+  } finally {
+    btnRemover.disabled = false;
+  }
+}
+
+
+
 
 function montarAlunoDoFormulario() {
   return {
